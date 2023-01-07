@@ -33,10 +33,4 @@ class StockList(Resource):
         return jsonify(stock=[item.serialize for item in db.session.query(Stock).all()])
 
 
-class StockCreate(Resource):
-    def get(self):
-        db.create_all()
-
-
 api.add_resource(StockList, "/api/stocks")
-api.add_resource(StockCreate, "/api/create")

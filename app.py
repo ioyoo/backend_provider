@@ -2,16 +2,12 @@ from flask import Flask, jsonify
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from .data.credentials import DBCredentials
-import json
 
 app = Flask(__name__)
 cred = DBCredentials()
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{cred.USER}:{cred.PASS}@{cred.URL}:{cred.PORT}/{cred.DB_NAME}'
 db = SQLAlchemy(app)
 api = Api(app)
-
-users = [{"name": "me"}, {"name": "mantas", "counter": 3123513471}]
-id = 0
 
 
 class Stock(db.Model):
@@ -34,7 +30,7 @@ class Stock(db.Model):
 
 class StockList(Resource):
     def get(self):
-        return jsonify(json_list=[item.serialize for item in db.session.query(Stock).all()])
+        return jsonify(stock=[item.serialize for item in db.session.query(Stock).all()])
 
 
 class StockCreate(Resource):
@@ -42,5 +38,5 @@ class StockCreate(Resource):
         db.create_all()
 
 
-api.add_resource(StockList, "/stocks")
-api.add_resource(StockCreate, "/create")
+api.add_resource(StockList, "/api/stocks")
+api.add_resource(StockCreate, "/api/create")

@@ -1,7 +1,8 @@
-from flask import Flask, jsonify
-from flask_restful import Api, Resource
+from flask import Flask, jsonify, request
+from flask_restful import Api, Resource, reqparse
 from flask_sqlalchemy import SQLAlchemy
 from .data.credentials import DBCredentials
+import json
 
 app = Flask(__name__)
 cred = DBCredentials()
@@ -30,7 +31,15 @@ class Stock(db.Model):
 
 class StockList(Resource):
     def get(self):
-        return jsonify(stock=[item.serialize for item in db.session.query(Stock).all()])
+        return jsonify([item.serialize for item in db.session.query(Stock).all()])
+
+    def post(self):
+        stock_json: dict = json.loads(request.get_json(force=True))
+        for name, score in stock_json.items():
+            stock = Stock(name, score)
+            db.session.add(stock)
+            db.session.commit()
+            app.logger.info(f"Introduced {name} : {score} in table")
 
 
 api.add_resource(StockList, "/api/stocks")

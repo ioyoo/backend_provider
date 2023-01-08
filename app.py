@@ -2,9 +2,11 @@ from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse
 from flask_sqlalchemy import SQLAlchemy
 from .data.credentials import DBCredentials
+from flask_cors import CORS
 import json
 
 app = Flask(__name__)
+CORS(app)
 cred = DBCredentials()
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{cred.USER}:{cred.PASS}@{cred.URL}:{cred.PORT}/{cred.DB_NAME}'
 db = SQLAlchemy(app)

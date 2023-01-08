@@ -36,7 +36,11 @@ class StockList(Resource):
     def post(self):
         stock_json: dict = json.loads(request.get_json(force=True))
         for name, score in stock_json.items():
-            stock = Stock(name, score)
+            stock: Stock = db.session.query(Stock).filter_by(name=name).first()
+            if not stock:
+                stock = Stock(name, score)
+            else:
+                stock.score = score
             db.session.add(stock)
             db.session.commit()
             app.logger.info(f"Introduced {name} : {score} in table")

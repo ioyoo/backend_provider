@@ -1,13 +1,8 @@
-from data.credentials import DBCredentials
-import requests
 import json
-
-CRED = DBCredentials()
-
+from data.databases import HourlyDB
 
 def lambda_handler(event, context):
-    response = requests.get("https://www.example.com/")
-    print(response.text)
-    return response.text
+    db = HourlyDB()
+    print(str(db.getColumnNames()))
 
 lambda_handler(1,1)

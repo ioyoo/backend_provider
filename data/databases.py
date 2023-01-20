@@ -11,7 +11,27 @@ class AWSDatabase:
         self.division= db.Table(table, self.metadata, autoload=True, autoload_with=self.engine)
     
     def queryAllData(self):
-        pass
+        """ returns all data in database
+
+        Returns:
+            list: contains a list with every item in database
+        """        
+        query =  self.division.select()
+        exe = self.conn.execute(query)
+        return exe.fetchall()
+    
+    def head(self, number=5):
+        """ returns {number} data in database
+
+        Args:
+            number (int, optional): Number of items to return. Defaults to 5.
+
+        Returns:
+            list: contains a list with the {number} of item in database
+        """        
+        query =  self.division.select()
+        exe = self.conn.execute(query)
+        return exe.fetchmany(number)
     
     def getColumnNames(self):
         return self.division.columns.keys()

@@ -1,4 +1,4 @@
-from .data.credentials import DBCredentials
+from data.credentials import DBCredentials
 import requests
 import json
 
@@ -9,3 +9,5 @@ def lambda_handler(event, context):
     response = requests.get("https://www.example.com/")
     print(response.text)
     return response.text
+
+lambda_handler(1,1)

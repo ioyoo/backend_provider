@@ -8,17 +8,17 @@ Install aws cli : https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-inst
 aws configure 
 
 # Start
-have .env in the backend_provider dirrectory
+have .env in the backend_provider directory
 # generate zip
 From backend_provider directory
-Compress-Archive -Path .\.env\Lib\site-packages\* -DestinationPath .\backend_provider\deployment_package.zip  
+cd .env/lib/python3.8/site-packages
+zip -r ../../../../deployment_package.zip . 
 
 # update zip
-From ioyoo directory
-Compress-Archive -Path .\.env\Lib\site-packages\* -Update -DestinationPath .\backend_provider\deployment_package.zip 
-
-# function code files to root 
-Compress-Archive -update .\lambda_function.py .\deployment_package.zip
+cd ../../../../
+zip -r deployment_package.zip data
+zip -r deployment_package.zip private
+zip -g my-deployment-package.zip lambda_function.py
 
 # upload example
 aws lambda update-function-code --function-name backend_provider --zip-file fileb://deployment_package.zip

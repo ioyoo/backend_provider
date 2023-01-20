@@ -8,7 +8,7 @@ class DBCredentials:
     URL = ""
     PORT = ""
     DB_NAME = ""
-    CRED_PATH = 'backend_provider\private\credentials.yaml'
+    CRED_PATH = 'private/credentials.yaml'
 
     def __init__(self, cred_path=CRED_PATH) -> None:
         self.CRED_PATH = cred_path

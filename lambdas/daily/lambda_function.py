@@ -53,8 +53,7 @@ def lambda_handler(event, context):
         method = event["httpMethod"]
         awsdb = AWSDatabase()
         if(method == "GET"):
-            raw_data = awsdb.queryAllData()
-            print(raw_data)
+            return create_response("200", awsdb.queryAllData())
         elif(method == "POST"):
             awsdb.postData
     except TypeError:

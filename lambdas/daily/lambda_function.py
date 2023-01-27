@@ -1,16 +1,19 @@
 import json
 import sqlalchemy as db
-
 from  data.credentials import DBCredentials
 
-def lambda_handler(event, context):
-    method = event["httpMethod"]
-    if(method == "GET"):
-        awsdb = AWSDatabase()
-        print(awsdb.queryAllData())
-    elif(method == "POST"):
-        pass
-        
+def rawToJson(raw_data):
+    tuple_data = [tuple(elem for elem in item) for item in raw_data]
+    row_data = {}
+    data = {}
+    for id, row in enumerate(tuple_data):
+        row_data = {"hour" : row[0].hour,
+                "minute": row[0].minute,
+                "second" : row[0].second}
+        for i in range (0, len(row)):
+            row_data[i] = row[i]
+        data[id] = row_data
+    return data
     
 class AWSDatabase:
     
@@ -29,5 +32,30 @@ class AWSDatabase:
         """        
         query =  self.division.select()
         exe = self.conn.execute(query)
-        return exe.fetchall()
+        raw_data = exe.fetchall()
+        self.conn.close()
+        return rawToJson(raw_data)
 
+    def postData(self, data):
+        pass
+
+def create_response(code, data = "{}", header="we are"):
+    return {
+        "statusCode": code,
+        "headers": {
+            "well" : header
+        },
+        "body": json.dumps(data)
+    }
+    
+def lambda_handler(event, context):
+    try:
+        method = event["httpMethod"]
+        awsdb = AWSDatabase()
+        if(method == "GET"):
+            raw_data = awsdb.queryAllData()
+            print(raw_data)
+        elif(method == "POST"):
+            awsdb.postData
+    except TypeError:
+        return create_response(404)

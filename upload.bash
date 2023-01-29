@@ -30,6 +30,8 @@ if [ $retval -ne 0 ]; then
     echo -e "${RED} Error: could not complete upload..."
     exit 1
 fi
+
+rm lambdas/$LAMBDA/deployment_package.zip
 echo -e "${GREEN} Deployment Complete!!!"
 
 source .env/bin/activate

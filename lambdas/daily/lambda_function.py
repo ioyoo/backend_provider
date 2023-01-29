@@ -10,7 +10,7 @@ def rawToJson(raw_data):
         row_data = {"hour" : row[0].hour,
                 "minute": row[0].minute,
                 "second" : row[0].second}
-        for i in range (0, len(row)):
+        for i in range (1, len(row)):
             row_data[i] = row[i]
         data[id] = row_data
     return data
@@ -58,3 +58,5 @@ def lambda_handler(event, context):
             awsdb.postData
     except TypeError:
         return create_response(404)
+    
+print(lambda_handler({"httpMethod" : "GET"}, 2))
